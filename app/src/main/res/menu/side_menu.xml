@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view"
 
-    <g
+    >
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/login_item"
+            android:title="Login/Out"
+           />
+        <item
+            android:id="@+id/events_item"
+            android:title="Events"/>
+        <item
+            android:id="@+id/cart_item"
+            android:title="Shopping cart"/>
+        <item
+            android:id="@+id/halls_item"
+            android:title="Hall scheme"/>
+        <item
+            android:id="@+id/info_item"
+            android:title="About us"/>
+
+    </group>
 
 </menu>

@@ -2,10 +2,12 @@ package com.telran.ticketsapp.presentation.login.presenter;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.telran.ticketsapp.App;
 import com.telran.ticketsapp.business.login.LoginInteractor;
-import com.telran.ticketsapp.di.LoginDependenceFactory;
+import com.telran.ticketsapp.di.login.LoginModule;
 import com.telran.ticketsapp.presentation.login.view.LoginView;
+
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -13,11 +15,12 @@ import io.reactivex.schedulers.Schedulers;
 
 @InjectViewState
 public class LoginPresenter extends MvpPresenter<LoginView> {
+    @Inject
     LoginInteractor interactor;
     Disposable disposable;
 
     public LoginPresenter() {
-        this.interactor = LoginDependenceFactory.getInstance().getInteractor();
+        App.get().plus(new LoginModule()).inject(this);
     }
 
     public void login(String email, String password){
@@ -59,5 +62,9 @@ public class LoginPresenter extends MvpPresenter<LoginView> {
         getViewState().hideProgress();
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        App.get().clearLoginComponent();
+    }
 }

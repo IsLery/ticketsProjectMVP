@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.telran.ticketsapp.R;
 import com.telran.ticketsapp.presentation.login.presenter.LoginPresenter;
+import com.telran.ticketsapp.presentation.registration.view.RegistrationFragment;
 
 import java.util.zip.Inflater;
 
@@ -30,6 +32,7 @@ public class LoginFragment extends MvpAppCompatFragment implements LoginView, Vi
     ProgressBar progressLogBar;
     AlertDialog recoverPassDialog;
     AlertDialog errorDialog;
+    public static final String TAG = "Login_fragment_Tag";
 
     @InjectPresenter
     LoginPresenter presenter;
@@ -44,7 +47,7 @@ public class LoginFragment extends MvpAppCompatFragment implements LoginView, Vi
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-
+        getActivity().setTitle("Log in:");
         inputEmail = view.findViewById(R.id.inputEmail);
         inputPassword = view.findViewById(R.id.inputPassword);
         loginBtn = view.findViewById(R.id.loginBtn);
@@ -110,12 +113,13 @@ public class LoginFragment extends MvpAppCompatFragment implements LoginView, Vi
 
     @Override
     public void showNextView() {
-        //TODO переход на регистрацию
+        requireFragmentManager().beginTransaction().replace(R.id.root,new RegistrationFragment()).addToBackStack("REG").commit();
     }
 
     @Override
     public void showPrevView() {
-        //TODO переход назад при успехе
+        Log.d(TAG, "showPrevView: ");
+        getChildFragmentManager().popBackStack();
     }
 
     @Override

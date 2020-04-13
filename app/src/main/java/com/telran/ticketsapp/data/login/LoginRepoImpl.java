@@ -2,28 +2,26 @@ package com.telran.ticketsapp.data.login;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.telran.ticketsapp.data.login.models.ErrorDto;
 import com.telran.ticketsapp.data.login.models.LoginInDto;
 import com.telran.ticketsapp.data.login.models.LoginOutDto;
 import com.telran.ticketsapp.data.login.models.PasswordRecoveryDto;
-import com.telran.ticketsapp.data.provider.store.StoreProvidder;
+import com.telran.ticketsapp.data.provider.store.StoreProvider;
 import com.telran.ticketsapp.data.provider.web.TicketsApi;
+import com.telran.ticketsapp.data.utils.DataFormatMethods;
 
 import java.io.IOException;
 
 import io.reactivex.Completable;
-import okhttp3.MediaType;
 import retrofit2.Response;
 
 public class LoginRepoImpl implements LoginRepository {
     public static final String TAG = "LoginRepository";
     TicketsApi api;
-    StoreProvidder providder;
+    StoreProvider provider;
 
-    public LoginRepoImpl(TicketsApi api, StoreProvidder providder) {
+    public LoginRepoImpl(TicketsApi api, StoreProvider provider) {
         this.api = api;
-        this.providder = providder;
+        this.provider = provider;
     }
 
     @Override
@@ -42,7 +40,7 @@ public class LoginRepoImpl implements LoginRepository {
         if (response.isSuccessful()) {
             Log.d(TAG, "onRecoverySuccess: success");
         } else if (response.code() == 400 || response.code() == 404) {
-            String msg = parseErrorMsg(response.errorBody().string());
+            String msg = DataFormatMethods.parseErrorMsg(response.errorBody().string());
             throw new RuntimeException(msg);
         } else {
             Log.d(TAG, "onRecoverySuccess: error" + response.errorBody().string());
@@ -55,9 +53,9 @@ public class LoginRepoImpl implements LoginRepository {
         if (response.isSuccessful()){
             LoginOutDto loginOutDto = response.body();
             Log.d(TAG, "onLoginSuccess: success"+loginOutDto.getToken());
-            providder.saveToken(loginOutDto.getToken());
+            provider.saveToken(loginOutDto.getToken());
         }else if(response.code() == 400 || response.code() == 404){
-            String msg = parseErrorMsg(response.errorBody().string());
+            String msg = DataFormatMethods.parseErrorMsg(response.errorBody().string());
             throw new RuntimeException(msg);
         }else {
             Log.d(TAG, "onLoginSuccess: error"+ response.errorBody().string());
@@ -65,9 +63,5 @@ public class LoginRepoImpl implements LoginRepository {
         }
     }
 
-    private String parseErrorMsg(String string) {
-        Gson gson = new Gson();
-        ErrorDto errorDto = gson.fromJson(string,ErrorDto.class);
-        return errorDto.getMessage();
-    }
+
 }

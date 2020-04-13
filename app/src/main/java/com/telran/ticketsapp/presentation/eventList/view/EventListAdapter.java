@@ -5,28 +5,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.squareup.picasso.Picasso;
 import com.telran.ticketsapp.R;
-import com.telran.ticketsapp.data.eventsList.models.EventDto;
+import com.telran.ticketsapp.data.eventsList.dto.EventDto;
+import com.telran.ticketsapp.data.utils.DataFormatMethods;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.EventHolder> {
+public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.EventHolder> implements EventAdapterLogic {
 
 
     private List<EventDto> eventsAll = new ArrayList<>();
+    private  OnEventItemClickListener onEventClickListener;
 
 
     private Context context;
@@ -36,13 +35,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         this.context = context;
     }
 
-    public void updateEvents(List<EventDto> moreEvents){
+    public void addMoreEvents(List<EventDto> moreEvents){
         eventsAll.addAll(moreEvents);
-        notifyDataSetChanged();
+        notifyItemInserted(getItemCount() - moreEvents.size());
     }
 
 
-    public void setEvents(List<EventDto> events) {
+    public void updateAllEvents(List<EventDto> events) {
         //чтоб зря не перерисовывать
         if (eventsAll == events){
             return;
@@ -66,6 +65,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         EventDto event = eventsAll.get(position);
         Log.d(TAG, "adapter onBindViewHolder: "+event + "position: " + position);
         holder.bind(event);
+        holder.itemView.setOnClickListener(v ->{
+            if (onEventClickListener != null){
+                onEventClickListener.onItemClick(EventListAdapter.this,position);
+            }
+        });
 
     }
 
@@ -77,9 +81,22 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         return 0;
     }
 
+    public String getEventId(int position) {
+        return eventsAll.get(position).getEventId();
+    }
+
+    public OnEventItemClickListener getOnEventClickListener() {
+        return onEventClickListener;
+    }
+
+    public void setOnEventClickListener(OnEventItemClickListener onEventClickListener) {
+        this.onEventClickListener = onEventClickListener;
+    }
+
     class EventHolder extends RecyclerView.ViewHolder{
         TextView eventTitleTxt, artistTxt, eventDateTxt;
         ImageView eventImage;
+
 
         public EventHolder(@NonNull View itemView) {
             super(itemView);
@@ -92,7 +109,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         public void bind(EventDto event){
             eventTitleTxt.setText(event.getEventName());
             artistTxt.setText(event.getArtist());
-            eventDateTxt.setText(event.getDateTxt());
+            eventDateTxt.setText(DataFormatMethods.getDateTxt("EEE, MMM d, yyyy",event.getEventStart()));
             String imgUrl = "https://i2.pickpik.com/photos/856/116/53/concert-party-island-festival-preview.jpg";
             if (event.getImages().size() > 0) {
                 imgUrl = event.getImages().get(0);
@@ -101,7 +118,12 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                     .load(imgUrl)
                     .into(eventImage);
 
+
         }
+
+
+
+
 //        private EventRowBinding binding;
 //
 //        public EventHolder(EventRowBinding binding) {

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.registration.view.RegistrationFragment"
-    android:padding="32dp">
+    android:padding="16dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -112,11 +112,11 @@
 <!--        android:ems="10"-->
 <!--        android:inputType="textPassword" />-->
 
-<!--    <Button-->
-<!--        android:id="@+id/registerBtn"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Register" />-->
+    <Button
+        android:id="@+id/registerBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register" />
     </LinearLayout>
 
     </ScrollView>

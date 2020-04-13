@@ -1,52 +1,51 @@
 package com.telran.ticketsapp.presentation.eventList.view;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckedTextView;
-import android.widget.DatePicker;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.telran.ticketsapp.R;
-import com.telran.ticketsapp.data.eventsList.models.EventDto;
-import com.telran.ticketsapp.presentation.eventList.presenter.EventListPresenter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.telran.ticketsapp.databinding.FragmentEventListBinding;
+import com.telran.ticketsapp.presentation.eventList.presenter.EventListPresenter;
+import com.telran.ticketsapp.presentation.eventList.view.filters.EventsFiltersDialog;
+import com.telran.ticketsapp.presentation.eventpage.view.EventFragment;
+
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class EventListFragment extends MvpAppCompatFragment implements EventListView{
+public class EventListFragment extends MvpAppCompatFragment implements EventListView, View.OnClickListener {
     private static final int GET_FILTERS = 1;
-    RecyclerView eventsRv;
-    ProgressBar eventListProgress;
-    Button showFiltersBtn;
-    public EventListAdapter adapter;
+    private FragmentEventListBinding binding;
+
+
+    private EventListAdapter adapter;
     private boolean isLoading;
+    private LinearLayoutManager layoutManager;
+    private RecyclerView.OnScrollListener scrollListener;
+    private EventsFiltersDialog filtersDialog;
+
     public static final String TAG = "EventListFragment";
-    private long startDate, endDate;
 
 
-//TODO загрузка, подгрузка через варарг или пустые данные, чтоб были только 2 метода - на получение исходника или отфильтрованных данных
 
     @InjectPresenter
     EventListPresenter presenter;
@@ -58,79 +57,128 @@ public class EventListFragment extends MvpAppCompatFragment implements EventList
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            Log.d(TAG, "onCreate: loading list");
-            isLoading = true;
-            presenter.getCurrentEvents();
+        setHasOptionsMenu(true);
+//        setRetainInstance(true);
+  //      presenter.getEvents();
+    }
 
-        }
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.eventlist_menu,menu);
+
+        MenuItem searchItem = menu.findItem(R.id.item_eventSearch);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d(TAG, "onQueryTextSubmit: "+query);
+                presenter.setSearchQuery(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+            
+        });
+
+        View closeBtn = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+        closeBtn.setOnClickListener(v -> {
+                    presenter.setSearchQuery("");
+                    searchView.setQuery("",false);
+            Log.d(TAG, "onCreateOptionsMenu: clear search");}
+        );
+        searchView.setOnSearchClickListener(v -> searchView.setQuery(presenter.getSearchQuery(),false));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        binding = FragmentEventListBinding.inflate(inflater,container,false);
         adapter = new EventListAdapter(requireContext());
 
-        View view = inflater.inflate(R.layout.fragment_event_list, container, false);
-        eventListProgress = view.findViewById(R.id.eventListProgress);
-        eventsRv = view.findViewById(R.id.eventsRv);
-        showFiltersBtn = view.findViewById(R.id.showFiltersBtn);
-        showFiltersBtn.setOnClickListener(v -> {
-            EventsFiltersDialog dialog = new EventsFiltersDialog(presenter);
-            dialog.setTargetFragment(EventListFragment.this, GET_FILTERS);
-            dialog.show(getFragmentManager(),null);
 
-        });
+        Objects.requireNonNull(getActivity()).setTitle("Events:");
+
+        binding.showFiltersBtn.setOnClickListener(this);
+        Log.d(TAG, "onCreateView: ");
+        layoutManager = new LinearLayoutManager(requireContext());
+        binding.eventsRv.setLayoutManager(layoutManager);
+        adapter = presenter.getAdapterInstance();
+        binding.eventsRv.setAdapter(adapter);
+        adapter.setOnEventClickListener(((adapter1, position) -> {
+                    EventFragment frag = EventFragment.newInstance(adapter.getEventId(position));
+                    requireFragmentManager().beginTransaction().replace(R.id.root,frag)
+                            .commit();
+        }));
+        return binding.getRoot();
+    }
 
 
 
-
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
-        eventsRv.setLayoutManager(layoutManager);
-        eventsRv.setAdapter(adapter);
-
-        eventsRv.addOnScrollListener(new RecyclerView.OnScrollListener(){
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int total = layoutManager.getItemCount();
-//                int visibleItemCount = layoutManager.getChildCount();
-//                int totalItemCount = layoutManager.getItemCount();
-                int lastVisiblePos = layoutManager.findLastVisibleItemPosition();
-                if (total > 0 && lastVisiblePos == total-1 && !isLoading){
-                    Log.d(TAG, "onScrolled: loading list");
-                    if (startDate == 0 && endDate == 0) {
-                        presenter.loadmore();
-                    }else {
-                        presenter.loadMoreInRange(startDate,endDate);
-                    }
-                    isLoading = true;
+    @Override
+    public void setScrollListener(){
+        Log.d(TAG, "setScrollListener: ");
+        if (scrollListener == null) {
+            scrollListener = new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
                 }
 
-            }
-        });
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (dx != 0 || dy != 0) {
+                        int total = layoutManager.getItemCount();
+                        int lastVisiblePos = layoutManager.findLastVisibleItemPosition();
+                        if (total > 0 && lastVisiblePos == total - 1 && !isLoading) {
+                            Log.d(TAG, "onScrolled: loading list");
+                            isLoading = true;
+                            presenter.loadmore();
 
-        return view;
+                        }
+                    }
+
+                }
+            };
+        }
+        binding.eventsRv.addOnScrollListener(scrollListener);
+    }
+
+    @Override
+    public void removeScrollListener(){
+        Log.d(TAG, "removeScrollListener: ");
+        binding.eventsRv.removeOnScrollListener(scrollListener);
+    }
+
+
+    @Override
+    public void showFiltersDialog() {
+        filtersDialog = new EventsFiltersDialog(presenter);
+        filtersDialog.setTargetFragment(EventListFragment.this, GET_FILTERS);
+        filtersDialog.show(getFragmentManager(),null);
     }
 
 
     @Override
     public void showProgress() {
-        eventsRv.setEnabled(false);
-        eventListProgress.setVisibility(View.VISIBLE);
+        binding.eventsRv.setEnabled(false);
+        binding.eventListProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-        eventListProgress.setVisibility(View.GONE);
-        eventsRv.setEnabled(true);
+        binding.eventListProgress.setVisibility(View.GONE);
+        binding.eventsRv.setEnabled(true);
 
     }
 
@@ -140,20 +188,15 @@ public class EventListFragment extends MvpAppCompatFragment implements EventList
     }
 
     @Override
-    public void updateAll(List<EventDto> eventDtos) {
-        isLoading = false;
-        adapter.setEvents(eventDtos);
-    }
-
-    @Override
-    public void loadMoreData(List<EventDto> eventDtos) {
-        isLoading = false;
-        adapter.updateEvents(eventDtos);
+    public void isLoadingData(boolean stillLoading) {
+        Log.d(TAG, "isLoadingData: "+stillLoading);
+        isLoading = stillLoading;
     }
 
     @Override
     public void showError(String m){
-        new AlertDialog.Builder(getContext())
+        isLoading = false;
+        new AlertDialog.Builder(requireContext())
                 .setTitle("Error")
                 .setMessage(m)
                 .setCancelable(false)
@@ -166,17 +209,21 @@ public class EventListFragment extends MvpAppCompatFragment implements EventList
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK){
-            if (requestCode == GET_FILTERS && data != null){
-                ArrayList<Integer> catgs = data.getIntegerArrayListExtra(EventsFiltersDialog.CATEGORIES);
-                Log.d(TAG, "onActivityResult: "+catgs.size());
-                startDate = data.getLongExtra(EventsFiltersDialog.START_DATE,0);
-                endDate = data.getLongExtra(EventsFiltersDialog.END_DATE,0);
-
-                // если был фильтр и пропал - загружаем текущие значения заново
-                // если тупо ничего не выбрано - оставляем как есть
-                presenter.getEventsInRange(startDate, endDate);
-                presenter.filterByCategory(catgs);
+            if (requestCode == GET_FILTERS){
+                Log.d(TAG, "onActivityResult: ");
+                presenter.getEvents();
             }
         }
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.showFiltersBtn:
+                presenter.openFilters();
+
+        }
+    }
+
+
 }

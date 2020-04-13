@@ -7,6 +7,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface RegView extends MvpView {
+    String TEST = "test";
     void showProgress();
     void hideProgress();
     @StateStrategyType(SingleStateStrategy.class)

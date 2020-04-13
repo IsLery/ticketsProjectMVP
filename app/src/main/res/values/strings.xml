@@ -23,4 +23,14 @@
     <string name="concerts">Concerts</string>
     <string name="exhibitions">Exhibitions</string>
     <string name="shows">Shows</string>
+    <string name="date_event">Date: </string>
+    <string name="tickets_event">Tickets available — </string>
+    <string name="price_range_txt">Price range: </string>
+    <string name="price_range_event">€%1$.2f - €%2$.2f</string>
+    <string name="price_same_event">Price: €%1$.2f</string>
+    <string name="buy_tickets">Buy tickets</string>
+    <string name="search">Search</string>
+    <string name="drawer_open">"Navigation drawer is open."</string>
+    <string name="drawer_closed">"Navigation drawer is closed."</string>
+    <string name="hall_address">Berlin City Hall\nFreudstrasse 69, 10117 Berlin\nTel.: 030 2223344\nFax: 030 2223355\nE-Mail: info@bch.de</string>
 </resources>

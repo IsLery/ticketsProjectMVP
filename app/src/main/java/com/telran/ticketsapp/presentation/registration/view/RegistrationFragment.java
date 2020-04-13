@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.telran.ticketsapp.R;
+import com.telran.ticketsapp.presentation.eventList.view.EventListFragment;
 import com.telran.ticketsapp.presentation.registration.presenter.RegistrationPresenter;
 
 import java.util.Objects;
@@ -39,12 +40,20 @@ public class RegistrationFragment extends MvpAppCompatFragment implements RegVie
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_registration, container, false);
+        getActivity().setTitle("Registration:");
         inputFirstName = view.findViewById(R.id.inputFirstName);
         inputLastName = view.findViewById(R.id.inputLastName);
         inputEmail = view.findViewById(R.id.inputEmail);
@@ -56,7 +65,7 @@ public class RegistrationFragment extends MvpAppCompatFragment implements RegVie
         maleRadioBtn.setChecked(true);
         femaleRadioBtn = view.findViewById(R.id.femaleRadioBtn);
         progressRegBar = view.findViewById(R.id.progressRegBar);
-
+        registerBtn = view.findViewById(R.id.registerBtn);
         registerBtn.setOnClickListener(this);
         return view;
     }
@@ -104,7 +113,7 @@ public class RegistrationFragment extends MvpAppCompatFragment implements RegVie
     @Override
     public void showNextView() {
         //TODO add navigator
-        Toast.makeText(getContext(), "SHOW NEXT VIEW", Toast.LENGTH_SHORT).show();
+        requireFragmentManager().beginTransaction().replace(R.id.root,new EventListFragment());
     }
 
     @Override
@@ -128,4 +137,5 @@ public class RegistrationFragment extends MvpAppCompatFragment implements RegVie
              password, phoneNumber);
         }
     }
+    //TODO CHECK NAVIGATION!
 }

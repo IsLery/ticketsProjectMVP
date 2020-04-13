@@ -2,9 +2,12 @@ package com.telran.ticketsapp.presentation.registration.presenter;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
+import com.telran.ticketsapp.App;
 import com.telran.ticketsapp.business.registration.RegInteractor;
-import com.telran.ticketsapp.di.RegDependenceFactory;
+import com.telran.ticketsapp.di.registration.RegistrationModule;
 import com.telran.ticketsapp.presentation.registration.view.RegView;
+
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -12,10 +15,12 @@ import io.reactivex.schedulers.Schedulers;
 
 @InjectViewState
 public class RegistrationPresenter extends MvpPresenter<RegView> {
-    private RegInteractor interactor;
+    @Inject
+    public RegInteractor interactor;
 
+    private Disposable disposable;
     public RegistrationPresenter() {
-        this.interactor = RegDependenceFactory.getInstance().getInteractor();
+        App.get().plus(new RegistrationModule()).inject(this);
     }
 
     public void onRegistration(int gender,
@@ -25,7 +30,7 @@ public class RegistrationPresenter extends MvpPresenter<RegView> {
                                String password,
                                String phoneNumber){
         getViewState().showProgress();
-        Disposable disposable = interactor.onRegistration(gender, firstName,
+         disposable = interactor.onRegistration(gender, firstName,
                 lastName, email,
                 password, phoneNumber)
                 .subscribeOn(Schedulers.io())
@@ -50,5 +55,12 @@ public class RegistrationPresenter extends MvpPresenter<RegView> {
         getViewState().showError(error);
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (disposable!= null) {
+            disposable.dispose();
+        }
+        App.get().clearRegistrationComponent();
+    }
 }

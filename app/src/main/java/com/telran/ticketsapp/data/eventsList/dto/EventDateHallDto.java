@@ -1,4 +1,4 @@
-package com.telran.ticketsapp.data.eventsList.models;
+package com.telran.ticketsapp.data.eventsList.dto;
 
 import java.util.List;
 

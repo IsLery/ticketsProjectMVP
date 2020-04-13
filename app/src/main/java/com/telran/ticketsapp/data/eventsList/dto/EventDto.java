@@ -1,4 +1,4 @@
-package com.telran.ticketsapp.data.eventsList.models;
+package com.telran.ticketsapp.data.eventsList.dto;
 
 
 
@@ -89,11 +89,10 @@ public class EventDto {
         return managers;
     }
 
-    public String getDateTxt() {
-        Date date = new Date();
-        date.setTime(eventStart);
-        SimpleDateFormat format = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        format.applyPattern("EEE, MMM d, yyyy");
-        return format.format(date);
+    public String searchInString() {
+        return (eventName + '\'' +
+                 artist + '\'' +
+                description).toLowerCase();
     }
+
 }

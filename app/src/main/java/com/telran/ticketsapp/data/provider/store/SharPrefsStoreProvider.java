@@ -2,7 +2,7 @@ package com.telran.ticketsapp.data.provider.store;
 
 import android.content.Context;
 
-public class SharPrefsStoreProvider implements StoreProvidder {
+public class SharPrefsStoreProvider implements StoreProvider {
     private static final String AUTH = "user_auth";
     private static final String USER_TOKEN = "user_token";
     Context context;
