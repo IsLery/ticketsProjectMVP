@@ -8,6 +8,7 @@ import com.telran.ticketsapp.data.login.models.LoginInDto;
 import com.telran.ticketsapp.data.login.models.LoginOutDto;
 import com.telran.ticketsapp.data.login.models.PasswordRecoveryDto;
 import com.telran.ticketsapp.data.registration.models.RegUserDto;
+import com.telran.ticketsapp.data.tickets.dto.HallStructureDto;
 
 import java.util.List;
 
@@ -42,6 +43,9 @@ public interface TicketsApi {
     @GET("event/{eventId}")
     Single<Response<EventDto>> getEvent(@Path("eventId") String id);
 
-    @GET("/events/rest/{eventId}")
+    @GET("events/rest/{eventId}")
     Single<Response<RestTicketDto>> getRestTickets(@Path("eventId") String id);
+
+    @GET("event/{eventId}/{isShort}")
+    Single<Response<HallStructureDto>> getEventTicketsInfo(@Path("eventId") String id, @Path("isShort") boolean isShort);
 }

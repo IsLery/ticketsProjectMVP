@@ -1,5 +1,7 @@
 package com.telran.ticketsapp.presentation.eventpage.presenter;
 
+import android.util.Log;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.telran.ticketsapp.App;
@@ -17,10 +19,14 @@ import io.reactivex.schedulers.Schedulers;
 
 @InjectViewState
 public class EventPresenter extends MvpPresenter<EventView> {
+    private static final String TAG = "EventPresenter";
+
     @Inject
     EventInteractor interactor;
 
-    Disposable disposable;
+    private Disposable disposable;
+
+    private UIEvent eventUI;
 
     public EventPresenter() {
         App.get().plus(new EventModule()).inject(this);
@@ -39,7 +45,12 @@ public class EventPresenter extends MvpPresenter<EventView> {
     }
 
     private void onGetEventSuccess(UIEvent event) {
+        eventUI = event;
         getViewState().setEventInfo(event);
+    }
+
+    public void toNextView(){
+        getViewState().showNextView(eventUI);
     }
 
     @Override

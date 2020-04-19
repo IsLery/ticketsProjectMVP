@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Single;
 
-public class EventListInteractorImpl implements EventListInteractor{
+public class EventListInteractorImpl implements EventListInteractor {
     public static final String TAG = "EventListIntrImpl";
     EventListRepository repository;
 
@@ -47,15 +47,17 @@ public class EventListInteractorImpl implements EventListInteractor{
     public List<Integer> getCategoryFilter() {
 
         List<Integer> categs = repository.getCategoryFilter();
-        if (categs.size() == 3){
-             return new ArrayList<>();
-        }
-        else return categs;
+        if (categs.size() == 3) {
+            return new ArrayList<>();
+        } else return categs;
     }
 
     @Override
     public boolean setCategoryFilter(List<Integer> selected) {
-       return repository.setCategoryFilter(selected);
+        if (selected== null || selected.size() == 3){
+            return repository.setCategoryFilter(null);
+        }
+        return repository.setCategoryFilter(selected);
     }
 
     @Override
@@ -64,17 +66,16 @@ public class EventListInteractorImpl implements EventListInteractor{
     }
 
     @Override
-    public boolean setDateFilter(Long date1, Long date2) {
-        if (date1 != null && date2 != null){
-            if (date1 < date2){
-            return     repository.setDateFilter(new Pair<>(date1, date2));
-            }else if (date1.equals(date2)){
-              return   repository.setDateFilter(new Pair<>(date1, date2+ TimeUnit.HOURS.toMillis(24)-1));
-            }else {
-              return   repository.setDateFilter(new Pair<>(date2, date1));
-            }
-        }else {
-          return   repository.setDateFilter(null);
+    public boolean setDateFilter(long date1, long date2) {
+        if (date1 == 0) {
+            return repository.setDateFilter(null);
+        }
+        if (date1 < date2) {
+            return repository.setDateFilter(new Pair<>(date1, date2));
+        } else if (date1 == date2) {
+            return repository.setDateFilter(new Pair<>(date1, date2 + TimeUnit.HOURS.toMillis(24) - 1));
+        } else {
+            return repository.setDateFilter(new Pair<>(date2, date1));
         }
     }
 
@@ -85,7 +86,7 @@ public class EventListInteractorImpl implements EventListInteractor{
 
     @Override
     public boolean setSearchFilter(String query) {
-      return   repository.setSearchFilter(query);
+        return repository.setSearchFilter(query);
 
     }
 

@@ -21,7 +21,7 @@ public interface EventListInteractor {
 
 
     Pair<Long, Long> getDateFilter();
-    boolean setDateFilter(Long date1, Long date2);
+    boolean setDateFilter(long date1, long date2);
 
     String getSearchFilter();
     boolean setSearchFilter(String query);

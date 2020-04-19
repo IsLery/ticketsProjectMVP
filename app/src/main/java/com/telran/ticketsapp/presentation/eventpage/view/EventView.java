@@ -8,7 +8,7 @@ public interface EventView extends MvpView {
 
     void showProgress();
     void hideProgress();
-    void showNextView();
+    void showNextView(UIEvent event);
     void showError(String error);
     void setEventInfo(UIEvent event);
 }

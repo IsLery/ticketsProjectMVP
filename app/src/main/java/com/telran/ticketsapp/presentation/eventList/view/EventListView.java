@@ -20,7 +20,10 @@ public interface EventListView extends MvpView {
    // @StateStrategyType(OneExecutionStateStrategy.class)
     void setScrollListener();
     void removeScrollListener();
+    @StateStrategyType(SingleStateStrategy.class)
     void showFiltersDialog();
+    @StateStrategyType(SingleStateStrategy.class)
+    void hideFiltersDialog();
   // void setAdapter(EventListAdapter adapter);
 
 }

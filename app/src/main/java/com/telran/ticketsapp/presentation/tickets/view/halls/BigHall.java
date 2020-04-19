@@ -1,8 +1,7 @@
-package com.telran.ticketsapp.presentation.selecttickets.view.halls;
+package com.telran.ticketsapp.presentation.tickets.view.halls;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageButton;

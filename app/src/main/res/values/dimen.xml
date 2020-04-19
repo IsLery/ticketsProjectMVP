@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="def_offs">16dp</dimen>
+    <dimen name="large_offs">32dp</dimen>
+    <dimen name="small_offs">8dp</dimen>
+</resources>

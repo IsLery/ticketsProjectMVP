@@ -8,6 +8,8 @@ import com.telran.ticketsapp.di.login.LoginComponent;
 import com.telran.ticketsapp.di.login.LoginModule;
 import com.telran.ticketsapp.di.registration.RegistrationComponent;
 import com.telran.ticketsapp.di.registration.RegistrationModule;
+import com.telran.ticketsapp.di.tickets.TicketsComponent;
+import com.telran.ticketsapp.di.tickets.TicketsModule;
 
 import javax.inject.Singleton;
 
@@ -20,4 +22,5 @@ public interface AppComponent {
     RegistrationComponent plus(RegistrationModule module);
     EventsListComponent plus(EventsListModule module);
     EventComponent plus(EventModule module);
+    TicketsComponent plus(TicketsModule module);
 }

@@ -6,6 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -20,69 +25,100 @@ import com.telran.ticketsapp.presentation.login.view.LoginFragment;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    DrawerLayout drawer;
+    ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-        drawer = binding.drawerLayout;
-        setSupportActionBar( binding.appToolbar);
+       setSupportActionBar( binding.appToolbar);
       //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer, binding.appToolbar,
-                R.string.drawer_open,R.string.drawer_closed);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer, binding.appToolbar,
+//                R.string.drawer_open,R.string.drawer_closed);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
 
-        NavigationView navView = binding.navView;
-        navView.setNavigationItemSelectedListener(this);
+//        NavigationView navView = binding.navView;
+//        navView.setNavigationItemSelectedListener(this);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.root, new EventListFragment())
-                    .commit();
-            navView.setCheckedItem(R.id.events_item);
-        }
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.root, new EventListFragment())
+//                    .commit();
+//            navView.setCheckedItem(R.id.events_item);
+//        }
+
+        NavController navController = Navigation.findNavController(this,R.id.nav_host_fragment);
+
+        NavigationUI.setupActionBarWithNavController(this,navController,binding.drawerLayout);
+//        AppBarConfiguration appBarConfiguration =
+//                new AppBarConfiguration.Builder(navController.getGraph())
+//                        .setDrawerLayout(binding.drawerLayout)
+//                        .build();
+        NavigationUI.setupWithNavController(binding.navView,navController);
+        binding.navView.setNavigationItemSelectedListener(this);
 
     }
 
     @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)){
-            drawer.closeDrawer(GravityCompat.START);
-        }
-//        else if(getSupportFragmentManager().getBackStackEntryCount()>1){
-//            getSupportFragmentManager().
-//        }
-        else{
-            super.onBackPressed();
-        }
+    public boolean onSupportNavigateUp() {
+        return NavigationUI.navigateUp(Navigation.findNavController(this,R.id.nav_host_fragment),binding.drawerLayout);
     }
+
+    //    @Override
+//    public void onBackPressed() {
+//        if (drawer.isDrawerOpen(GravityCompat.START)){
+//            drawer.closeDrawer(GravityCompat.START);
+//        }
+////        else if(getSupportFragmentManager().getBackStackEntryCount()>1){
+////            getSupportFragmentManager().
+////        }
+//        else{
+//            super.onBackPressed();
+//        }
+//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.events_item:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.root,new EventListFragment())
-                  //      .addToBackStack("LIST")
-                        .commit();
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.root,new EventListFragment())
+//                  //      .addToBackStack("LIST")
+//                        .commit();
+                NavOptions options = new NavOptions.Builder()
+                        .setPopUpTo(R.id.main_navigation,true)
+                        .build();
+
+                Navigation.findNavController(this,R.id.nav_host_fragment).navigate(R.id.eventListFragment,null,options);
                 break;
             case R.id.login_item:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.root,new LoginFragment())
-                  //      .addToBackStack("LOGIN")
-                        .commit();
+//                getSupportFragmentManager().beginTransaction()
+////                        .replace(R.id.root,new LoginFragment())
+////                  //      .addToBackStack("LOGIN")
+////                        .commit();
+                Navigation.findNavController(this,R.id.nav_host_fragment).navigate(R.id.action_eventListFragment_to_loginFragment);
+
                 break;
+            case R.id.cart_item:
+                Navigation.findNavController(this,R.id.nav_host_fragment).navigate(R.id.action_eventListFragment_to_cartFragment);
+                break;
+            case android.R.id.home:
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
+                    binding.drawerLayout.closeDrawer(GravityCompat.START);
+                    return true;
+                }else {
+                    return false;
+                }
+
             default:
                 Toast.makeText(this, "No fragment yet", Toast.LENGTH_SHORT).show();
         }
-        drawer.closeDrawer(GravityCompat.START);
+        binding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 

@@ -28,9 +28,16 @@
     <string name="price_range_txt">Price range: </string>
     <string name="price_range_event">€%1$.2f - €%2$.2f</string>
     <string name="price_same_event">Price: €%1$.2f</string>
+    <string name="price_range">€ %1$.2f</string>
     <string name="buy_tickets">Buy tickets</string>
     <string name="search">Search</string>
+    <plurals name="tickets_qty">
+        <item quantity="one">%1$d ticket</item>
+        <item quantity="other">%1$d tickets</item>
+    </plurals>
     <string name="drawer_open">"Navigation drawer is open."</string>
     <string name="drawer_closed">"Navigation drawer is closed."</string>
     <string name="hall_address">Berlin City Hall\nFreudstrasse 69, 10117 Berlin\nTel.: 030 2223344\nFax: 030 2223355\nE-Mail: info@bch.de</string>
+    <string name="reserved_for_10min">The tickets shown here have now been reserved for you for 10 minutes.</string>
+    <string name="delete_selection">Delete selection</string>
 </resources>

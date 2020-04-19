@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,9 +28,13 @@ import com.telran.ticketsapp.presentation.eventList.presenter.EventListPresenter
 import com.telran.ticketsapp.presentation.eventList.view.filters.EventsFiltersDialog;
 import com.telran.ticketsapp.presentation.eventpage.view.EventFragment;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
+import static com.telran.ticketsapp.presentation.eventList.view.filters.EventsFiltersDialog.CATEGORIES;
+import static com.telran.ticketsapp.presentation.eventList.view.filters.EventsFiltersDialog.END_DATE;
+import static com.telran.ticketsapp.presentation.eventList.view.filters.EventsFiltersDialog.START_DATE;
 
 
 public class EventListFragment extends MvpAppCompatFragment implements EventListView, View.OnClickListener {
@@ -58,6 +63,10 @@ public class EventListFragment extends MvpAppCompatFragment implements EventList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        filtersDialog = new EventsFiltersDialog();
+       // setRetainInstance(true);
+
+
 //        setRetainInstance(true);
   //      presenter.getEvents();
     }
@@ -106,7 +115,7 @@ public class EventListFragment extends MvpAppCompatFragment implements EventList
         adapter = new EventListAdapter(requireContext());
 
 
-        Objects.requireNonNull(getActivity()).setTitle("Events:");
+    //    Objects.requireNonNull(getActivity()).setTitle("Events:");
 
         binding.showFiltersBtn.setOnClickListener(this);
         Log.d(TAG, "onCreateView: ");
@@ -115,9 +124,10 @@ public class EventListFragment extends MvpAppCompatFragment implements EventList
         adapter = presenter.getAdapterInstance();
         binding.eventsRv.setAdapter(adapter);
         adapter.setOnEventClickListener(((adapter1, position) -> {
-                    EventFragment frag = EventFragment.newInstance(adapter.getEventId(position));
-                    requireFragmentManager().beginTransaction().replace(R.id.root,frag)
-                            .commit();
+//                    EventFragment frag = EventFragment.newInstance(adapter.getEventId(position));
+//                    requireFragmentManager().beginTransaction().replace(R.id.root,frag)
+//                            .commit();
+            Navigation.findNavController(binding.getRoot()).navigate(R.id.eventFragment,EventFragment.eventFragmentBundle(adapter.getEventId(position)));
         }));
         return binding.getRoot();
     }
@@ -160,12 +170,25 @@ public class EventListFragment extends MvpAppCompatFragment implements EventList
         binding.eventsRv.removeOnScrollListener(scrollListener);
     }
 
+    public EventListPresenter getListPresenter(){
+        return presenter;
+    }
 
     @Override
     public void showFiltersDialog() {
-        filtersDialog = new EventsFiltersDialog(presenter);
+//        if (filtersDialog == null) {
+//            filtersDialog = new EventsFiltersDialog();
+//            filtersDialog.setTargetFragment(EventListFragment.this, GET_FILTERS);
+//        }
+      //  Navigation.findNavController(binding.getRoot()).navigate(R.id.eventsFiltersDialog);
         filtersDialog.setTargetFragment(EventListFragment.this, GET_FILTERS);
-        filtersDialog.show(getFragmentManager(),null);
+        filtersDialog.show(getParentFragmentManager(),null);
+    }
+
+    public void hideFiltersDialog(){
+//        if (filtersDialog != null) {
+//            filtersDialog.dismiss();
+//        }
     }
 
 
@@ -209,9 +232,11 @@ public class EventListFragment extends MvpAppCompatFragment implements EventList
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK){
-            if (requestCode == GET_FILTERS){
+            if (requestCode == GET_FILTERS && data!= null){
+                presenter.closeFilters();
                 Log.d(TAG, "onActivityResult: ");
-                presenter.getEvents();
+                presenter.setFilterDates(data.getLongExtra(START_DATE,0),data.getLongExtra(END_DATE,0));
+                presenter.setFilterCategories(data.getIntegerArrayListExtra(CATEGORIES));
             }
         }
     }

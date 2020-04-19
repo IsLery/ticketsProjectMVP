@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/eventListFragment">
+
+    <fragment
+        android:id="@+id/eventListFragment"
+        android:name="com.telran.ticketsapp.presentation.eventList.view.EventListFragment"
+        android:label="EVENTS"
+        tools:layout="@layout/fragment_event_list">
+        <action
+            android:id="@+id/action_eventListFragment_to_eventFragment"
+            app:destination="@id/eventFragment" />
+        <action
+            android:id="@+id/action_eventListFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_eventListFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_eventListFragment_to_eventsFiltersDialog"
+            app:destination="@id/eventsFiltersDialog" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/eventFragment"
+        android:name="com.telran.ticketsapp.presentation.eventpage.view.EventFragment"
+        android:label="EVENTS"
+        tools:layout="@layout/fragment_event">
+        <action
+            android:id="@+id/action_eventFragment_to_hallTicketsFragment"
+            app:destination="@id/hallTicketsFragment"
+            app:popUpTo="@id/eventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/hallTicketsFragment"
+        android:name="com.telran.ticketsapp.presentation.tickets.view.HallTicketsFragment"
+        android:label="TICKETS"
+        tools:layout="@layout/fragment_hall_tickets" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.telran.ticketsapp.presentation.login.view.LoginFragment"
+        android:label="LOG IN"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment"
+            app:launchSingleTop="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="com.telran.ticketsapp.presentation.registration.view.RegistrationFragment"
+        android:label="REGISTRATION"
+        tools:layout="@layout/fragment_registration" />
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.telran.ticketsapp.presentation.cart.view.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart" />
+    <dialog
+        android:id="@+id/eventsFiltersDialog"
+        android:name="com.telran.ticketsapp.presentation.eventList.view.filters.EventsFiltersDialog"
+        android:label="EventsFiltersDialog" />
+</navigation>

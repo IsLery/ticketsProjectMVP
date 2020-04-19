@@ -96,6 +96,7 @@ public class EventsListRepositoryImpl implements EventListRepository{
                 categFilters.clear();
                 return true;
             }
+            return false;
         }else  if (categFilters.size() != selected.size() || !categFilters.containsAll(selected)){
             categFilters = selected;
             categFilterChanged = true;

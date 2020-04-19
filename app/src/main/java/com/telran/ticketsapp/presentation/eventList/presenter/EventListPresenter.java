@@ -50,6 +50,7 @@ public class EventListPresenter extends MvpPresenter<EventListView> {
 
     }
 
+
     //TODO переделать через даггер
     public EventListAdapter getAdapterInstance(){
         return (EventListAdapter) adapterLogic;
@@ -107,10 +108,13 @@ public class EventListPresenter extends MvpPresenter<EventListView> {
     }
 
     public void setFilterCategories(List<Integer> categories){
-        interactor.setCategoryFilter(categories);
+        Log.d(TAG, "setFilterCategories: ");
+        if (interactor.setCategoryFilter(categories)){
+            getEvents();
+        }
     }
 
-    public void setFilterDates(Long start, Long end){
+    public void setFilterDates(long start, long end){
         Log.d(TAG, "setFilterDates: ");
         if (interactor.setDateFilter(start, end)){
             getViewState().setScrollListener();
@@ -146,9 +150,9 @@ public class EventListPresenter extends MvpPresenter<EventListView> {
             getViewState().showFiltersDialog();
     }
 
-  //  public void closeFilters(){
-//        getViewState().showFiltersDialog();
-//    }
+    public void closeFilters(){
+        getViewState().hideFiltersDialog();
+    }
 
     @Override
     public void onDestroy() {

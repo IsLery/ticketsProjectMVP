@@ -1,4 +1,4 @@
-package com.telran.ticketsapp.presentation.selecttickets.view;
+package com.telran.ticketsapp.presentation.cart.view;
 
 import android.os.Bundle;
 
@@ -13,9 +13,9 @@ import com.telran.ticketsapp.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HallTicketsFragment extends Fragment {
+public class CartFragment extends Fragment {
 
-    public HallTicketsFragment() {
+    public CartFragment() {
         // Required empty public constructor
     }
 
@@ -24,6 +24,6 @@ public class HallTicketsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_hall_tickets, container, false);
+        return inflater.inflate(R.layout.fragment_cart, container, false);
     }
 }

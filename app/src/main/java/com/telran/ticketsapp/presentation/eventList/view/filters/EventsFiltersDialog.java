@@ -3,6 +3,7 @@ package com.telran.ticketsapp.presentation.eventList.view.filters;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +14,18 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.Navigation;
 
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 
+import com.google.android.material.navigation.NavigationView;
 import com.squareup.timessquare.CalendarPickerView;
 import com.telran.ticketsapp.R;
 import com.telran.ticketsapp.databinding.EventsFilterBinding;
 import com.telran.ticketsapp.presentation.eventList.presenter.EventListPresenter;
+import com.telran.ticketsapp.presentation.eventList.view.EventListFragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,6 +45,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class EventsFiltersDialog extends BottomSheetDialogFragment implements View.OnClickListener {
     public static final String CATEGORIES = "Selected categories" ;
+    private static final String INIT_CATEGS = "initial categories";
     private static final String TAG = "EventsFiltersDialog";
     public static final String START_DATE = "start_date";
     public static final String END_DATE = "end_date";
@@ -49,24 +54,34 @@ public class EventsFiltersDialog extends BottomSheetDialogFragment implements Vi
 
 
 
-    Unbinder unbinder;
-
     EventsFilterBinding binding;
-    EventListPresenter presenter;
+   // private ArrayList<Integer> selectedCategories;
     private List<Integer> selectedCategories;
-    private ArrayList<Date> selectedDates = new ArrayList<>(2);
+    private ArrayList<CheckedTextView> categs;
+    private ArrayList<Date> selectedDates;
+    private EventListPresenter presenter;
 
     public EventsFiltersDialog() {
     }
 
-    public EventsFiltersDialog(EventListPresenter presenter) {
-//        this.presenter = presenter;
-//        selectedCategories = presenter.getFilterCategories();
+
+    public static EventsFiltersDialog getInstance(ArrayList<Integer> selected){
+        Bundle args = new Bundle();
+        args.putIntegerArrayList(INIT_CATEGS,selected);
+        EventsFiltersDialog dialog = new EventsFiltersDialog();
+        dialog.setArguments(args);
+        return dialog;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+       // presenter = fragment.getListPresenter();
+     //   selectedCategories = presenter.getFilterCategories();
+        selectedCategories = new ArrayList<>(3);
+        categs = new ArrayList<>();
+       selectedDates = new ArrayList<>(2);
 
     }
 
@@ -74,12 +89,26 @@ public class EventsFiltersDialog extends BottomSheetDialogFragment implements Vi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = EventsFilterBinding.inflate(inflater,container,false);
+        categs.add(binding.showsTxt);
+        categs.add(binding.concertsTxt);
+        categs.add(binding.exhibitionsTxt);
 
+        for (CheckedTextView v: categs) {
+                Log.d(TAG, "onCreateView: categs"+ v.getText());
+                if (selectedCategories.size() > 0){
+                    initiallySelected(v);
+                }
+                v.setOnClickListener(this);
+        }
         Calendar nextYear = Calendar.getInstance();
         nextYear.add(Calendar.YEAR, 1);
         Date today = new Date();
         binding.eventCalendarView.init(today,nextYear.getTime()).inMode(CalendarPickerView.SelectionMode.RANGE);
+        if (selectedDates.size()>1) {
 
+            binding.eventCalendarView.selectDate(selectedDates.get(0));
+            binding.eventCalendarView.selectDate(selectedDates.get(1));
+        }
         binding.eventCalendarView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(Date date) {
@@ -91,25 +120,17 @@ public class EventsFiltersDialog extends BottomSheetDialogFragment implements Vi
             selectedDates.remove(date);
             }
         });
-
-        initiallySelected(binding.showsTxt);
-        initiallySelected(binding.concertsTxt);
-        initiallySelected(binding.exhibitionsTxt);
-
-
         binding.hideFilters.setOnClickListener(this);
+        binding.eventCategories.setOnClickListener(this);
+        binding.showCalender.setOnClickListener(this);
+        binding.clearFilters.setOnClickListener(this);
+        binding.selectFilters.setOnClickListener(this);
 
         return binding.getRoot();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
-    }
 
-
-    void changeCategVisibility(){
+    private void changeCategVisibility(){
     if (binding.categoriesContainer.getVisibility() == View.VISIBLE)
     {
         binding.categoriesContainer.setVisibility(View.GONE);}
@@ -119,7 +140,7 @@ public class EventsFiltersDialog extends BottomSheetDialogFragment implements Vi
     }
 
 
-    void changeCalenderVisibility(){
+    private void changeCalenderVisibility(){
         if (binding.eventCalendarView.getVisibility() == View.GONE) {
             binding.eventCalendarView.setVisibility(View.VISIBLE);
         }else {
@@ -127,39 +148,58 @@ public class EventsFiltersDialog extends BottomSheetDialogFragment implements Vi
         }
     }
 
+    private void sendResult(){
+//        long start = selectedDates.size() >= 1 ? selectedDates.get(0).getTime() : 0;
+//        long end = selectedDates.size() >= 2 ? selectedDates.get(1).getTime() : 0;
+//        presenter.setFilterDates(start,end);
+//        presenter.setFilterCategories(selectedCategories);
 
-    void endDialog(){
-        dismiss();
-    }
-
-
-
-    public void sendResult(){
     if (getTargetFragment() == null){
         return;
     }
 
     Intent intent = new Intent();
+
         Log.d(TAG, "sendResult: "+ selectedCategories.size());
-        presenter.setFilterCategories(selectedCategories);
         Long start = selectedDates.size() >= 1 ? selectedDates.get(0).getTime() : null;
         Long end = selectedDates.size() >= 2 ? selectedDates.get(1).getTime() : null;
         Log.d(TAG, "sendResult: startdate" + start);
         Log.d(TAG, "sendResult: enddate " + end);
-        presenter.setFilterDates(start, end);
-   //     getTargetFragment().onActivityResult(getTargetRequestCode(),RESULT_OK,intent);
+        intent.putIntegerArrayListExtra(CATEGORIES,(ArrayList<Integer>)selectedCategories);
+        intent.putExtra(START_DATE, start);
+        intent.putExtra(END_DATE, end);
+        getTargetFragment().onActivityResult(getTargetRequestCode(),RESULT_OK,intent);
+
      //   presenter.closeFilters();
     }
 
 
-    public void clearFilters(){
-        presenter.setFilterDates(null, null);
-        presenter.setFilterCategories(null);
+    private void clearFilters(){
+        if (getTargetFragment() == null){
+            return;
+        }
+        for (CheckedTextView v: categs
+             ) {
+            v.setChecked(false);
+        }
+        selectedCategories.clear();
+//        presenter.setFilterDates(0,0);
+//        presenter.setFilterCategories(null);
+      //  Navigation.findNavController(binding.getRoot()).popBackStack();
+        Intent intent = new Intent();
+
+        intent.putIntegerArrayListExtra(CATEGORIES,null);
+        intent.putExtra(START_DATE, 0);
+        intent.putExtra(END_DATE, 0);
+        Log.d(TAG, "clearFilters: ");
+
+        getTargetFragment().onActivityResult(getTargetRequestCode(),RESULT_OK,intent);
+
 
     }
 
 
-    public void selectCategory(  CheckedTextView catView){
+    private void selectCategory(  CheckedTextView catView){
         catView.setChecked(!catView.isChecked());
         Integer tag = Integer.parseInt(catView.getTag().toString());
         if (catView.isChecked()){
@@ -174,6 +214,7 @@ public class EventsFiltersDialog extends BottomSheetDialogFragment implements Vi
         Integer tag = Integer.parseInt(catView.getTag().toString());
         if (selectedCategories.contains(tag)){
             catView.setChecked(true);
+
         }
     }
 
@@ -184,22 +225,30 @@ public class EventsFiltersDialog extends BottomSheetDialogFragment implements Vi
             case R.id.concertsTxt:
             case R.id.showsTxt:
                 selectCategory((CheckedTextView) v);
-                break;
+                return;
             case R.id.hideFilters:
+              //  getActivity().onBackPressed();
+             //   Navigation.findNavController(binding.getRoot()).popBackStack();
+             //   dismiss();
                 dismiss();
-                break;
+                return;
             case R.id.clearFilters:
                 clearFilters();
-                break;
+                dismiss();
+               // getActivity().onBackPressed();
+                return;
             case R.id.selectFilters:
                 sendResult();
-                break;
+                dismiss();
+             //   getChildFragmentManager().popBackStack();
+             //   getActivity().onBackPressed();
+                return;
             case R.id.eventCategories:
                 changeCategVisibility();
-                break;
+                return;
             case R.id.showCalender:
                 changeCalenderVisibility();
-                break;
+
         }
     }
 

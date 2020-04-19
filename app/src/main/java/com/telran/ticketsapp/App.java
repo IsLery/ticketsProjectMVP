@@ -13,6 +13,8 @@ import com.telran.ticketsapp.di.login.LoginComponent;
 import com.telran.ticketsapp.di.login.LoginModule;
 import com.telran.ticketsapp.di.registration.RegistrationComponent;
 import com.telran.ticketsapp.di.registration.RegistrationModule;
+import com.telran.ticketsapp.di.tickets.TicketsComponent;
+import com.telran.ticketsapp.di.tickets.TicketsModule;
 
 public class App extends Application {
     public static App app;
@@ -22,6 +24,7 @@ public class App extends Application {
     private RegistrationComponent registrationComponent;
     private EventsListComponent eventsListComponent;
     private EventComponent eventComponent;
+    private TicketsComponent ticketsComponent;
 
     public App() {
         app = this;
@@ -82,5 +85,16 @@ public class App extends Application {
 
     public void clearEventComponent(){
         eventComponent = null;
+    }
+
+    public TicketsComponent plus(TicketsModule module){
+        if (ticketsComponent == null){
+            ticketsComponent = appComponent.plus(module);
+        }
+        return ticketsComponent;
+    }
+
+    public void clearTicketsComponent(){
+        ticketsComponent = null;
     }
 }

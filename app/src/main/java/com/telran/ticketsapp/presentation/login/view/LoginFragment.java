@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.telran.ticketsapp.R;
+import com.telran.ticketsapp.databinding.FragmentLoginBinding;
 import com.telran.ticketsapp.presentation.login.presenter.LoginPresenter;
 import com.telran.ticketsapp.presentation.registration.view.RegistrationFragment;
 
@@ -37,6 +39,8 @@ public class LoginFragment extends MvpAppCompatFragment implements LoginView, Vi
     @InjectPresenter
     LoginPresenter presenter;
 
+    FragmentLoginBinding binding;
+
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -46,8 +50,9 @@ public class LoginFragment extends MvpAppCompatFragment implements LoginView, Vi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
-        getActivity().setTitle("Log in:");
+       // getActivity().setTitle("Log in:");
+        binding = FragmentLoginBinding.inflate(inflater,container,false);
+        View view = binding.getRoot();
         inputEmail = view.findViewById(R.id.inputEmail);
         inputPassword = view.findViewById(R.id.inputPassword);
         loginBtn = view.findViewById(R.id.loginBtn);
@@ -113,13 +118,14 @@ public class LoginFragment extends MvpAppCompatFragment implements LoginView, Vi
 
     @Override
     public void showNextView() {
-        requireFragmentManager().beginTransaction().replace(R.id.root,new RegistrationFragment()).addToBackStack("REG").commit();
+       // requireFragmentManager().beginTransaction().replace(R.id.root,new RegistrationFragment()).addToBackStack("REG").commit();
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_loginFragment_to_registrationFragment);
     }
 
     @Override
     public void showPrevView() {
         Log.d(TAG, "showPrevView: ");
-        getChildFragmentManager().popBackStack();
+        Navigation.findNavController(binding.getRoot()).popBackStack();
     }
 
     @Override

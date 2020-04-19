@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.telran.ticketsapp.R;
+import com.telran.ticketsapp.databinding.FragmentRegistrationBinding;
 import com.telran.ticketsapp.presentation.eventList.view.EventListFragment;
 import com.telran.ticketsapp.presentation.registration.presenter.RegistrationPresenter;
 
@@ -26,11 +28,9 @@ import java.util.Objects;
  * A simple {@link Fragment} subclass.
  */
 public class RegistrationFragment extends MvpAppCompatFragment implements RegView, View.OnClickListener {
-    EditText inputFirstName, inputLastName, inputEmail, inputPhone, inputPassword/*, inputConfirmPassword*/;
-    Button registerBtn;
-    RadioButton maleRadioBtn, femaleRadioBtn;
-    ProgressBar progressRegBar;
+
     AlertDialog errorDialog;
+    FragmentRegistrationBinding binding;
 
     @InjectPresenter
     RegistrationPresenter presenter;
@@ -43,59 +43,48 @@ public class RegistrationFragment extends MvpAppCompatFragment implements RegVie
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_registration, container, false);
-        getActivity().setTitle("Registration:");
-        inputFirstName = view.findViewById(R.id.inputFirstName);
-        inputLastName = view.findViewById(R.id.inputLastName);
-        inputEmail = view.findViewById(R.id.inputEmail);
-        inputPhone = view.findViewById(R.id.inputPhone);
-        inputPassword = view.findViewById(R.id.inputPassword);
+        binding = FragmentRegistrationBinding.inflate(inflater,container,false);
       //  inputConfirmPassword = view.findViewById(R.id.inputConfirmPassword);
-        registerBtn = view.findViewById(R.id.registerBtn);
-        maleRadioBtn = view.findViewById(R.id.maleRadioBtn);
-        maleRadioBtn.setChecked(true);
-        femaleRadioBtn = view.findViewById(R.id.femaleRadioBtn);
-        progressRegBar = view.findViewById(R.id.progressRegBar);
-        registerBtn = view.findViewById(R.id.registerBtn);
-        registerBtn.setOnClickListener(this);
-        return view;
+
+        binding.maleRadioBtn.setChecked(true);
+
+        binding.registerBtn.setOnClickListener(this);
+        return binding.getRoot();
     }
 
     @Override
     public void showProgress() {
-        inputFirstName.setEnabled(false);
-        inputLastName.setEnabled(false);
-        inputEmail.setEnabled(false);
-        inputPhone.setEnabled(false);
-        inputPassword.setEnabled(false);
+        binding.inputFirstName.setEnabled(false);
+        binding.inputLastName.setEnabled(false);
+        binding.inputEmail.setEnabled(false);
+        binding.inputPhone.setEnabled(false);
+        binding.inputPassword.setEnabled(false);
       //  inputConfirmPassword.setEnabled(false);
-        registerBtn.setEnabled(false);
-        maleRadioBtn.setEnabled(false);
-        femaleRadioBtn.setEnabled(false);
-        progressRegBar.setVisibility(View.VISIBLE);;
+        binding.registerBtn.setEnabled(false);
+        binding.maleRadioBtn.setEnabled(false);
+        binding.femaleRadioBtn.setEnabled(false);
+        binding.progressRegBar.setVisibility(View.VISIBLE);;
     }
 
     @Override
     public void hideProgress() {
-        inputFirstName.setEnabled(true);
-        inputLastName.setEnabled(true);
-        inputEmail.setEnabled(true);
-        inputPhone.setEnabled(true);
-        inputPassword.setEnabled(true);
+        binding.inputFirstName.setEnabled(true);
+        binding.inputLastName.setEnabled(true);
+        binding.inputEmail.setEnabled(true);
+        binding.inputPhone.setEnabled(true);
+        binding.inputPassword.setEnabled(true);
       //  inputConfirmPassword.setEnabled(true);
-        registerBtn.setEnabled(true);
-        maleRadioBtn.setEnabled(true);
-        femaleRadioBtn.setEnabled(true);
-        progressRegBar.setVisibility(View.GONE);;
+        binding.registerBtn.setEnabled(true);
+        binding.maleRadioBtn.setEnabled(true);
+        binding.femaleRadioBtn.setEnabled(true);
+        binding.progressRegBar.setVisibility(View.GONE);;
 
     }
 
@@ -113,7 +102,8 @@ public class RegistrationFragment extends MvpAppCompatFragment implements RegVie
     @Override
     public void showNextView() {
         //TODO add navigator
-        requireFragmentManager().beginTransaction().replace(R.id.root,new EventListFragment());
+        Navigation.findNavController(binding.getRoot()).popBackStack();
+     //   requireFragmentManager().beginTransaction().replace(R.id.root,new EventListFragment());
     }
 
     @Override
@@ -126,12 +116,12 @@ public class RegistrationFragment extends MvpAppCompatFragment implements RegVie
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.registerBtn){
-            int gender = maleRadioBtn.isChecked() ? 1 : 2;
-            String firstName = inputFirstName.getText().toString();
-            String lastName = inputLastName.getText().toString();
-            String email = inputEmail.getText().toString();;
-            String password = inputPassword.getText().toString();;
-            String phoneNumber = inputPhone.getText().toString();;
+            int gender = binding.maleRadioBtn.isChecked() ? 1 : 2;
+            String firstName = binding.inputFirstName.getText().toString();
+            String lastName = binding.inputLastName.getText().toString();
+            String email = binding.inputEmail.getText().toString();;
+            String password = binding.inputPassword.getText().toString();;
+            String phoneNumber = binding.inputPhone.getText().toString();;
             presenter.onRegistration( gender, firstName,
              lastName, email,
              password, phoneNumber);
