@@ -11,17 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.telran.ticketsapp.R;
-import com.telran.ticketsapp.data.eventsList.dto.PriceRanges;
 import com.telran.ticketsapp.data.tickets.dto.HallStructureDto;
 import com.telran.ticketsapp.data.tickets.dto.PriceRangeDto;
 import com.telran.ticketsapp.databinding.FragmentHallTicketsBinding;
 import com.telran.ticketsapp.presentation.tickets.presenter.SelectTicketsPresenter;
-import com.telran.ticketsapp.presentation.tickets.view.halls.SmallHall;
+import com.telran.ticketsapp.presentation.tickets.view.halls.HallConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,14 +99,13 @@ public class HallTicketsFragment extends MvpAppCompatFragment implements HallTic
         List<String> prices = new ArrayList<>();
         ArrayAdapter<String> rangeAdapter = new ArrayAdapter<>(requireContext(),android.R.layout.simple_list_item_1,prices);
         binding.priceRanges.setAdapter(rangeAdapter);
-        for (PriceRangeDto r: ranges
-             ) {
+        for (PriceRangeDto r: ranges) {
             prices.add(getString(R.string.price_range,r.getPrice()));
         }
         if (binding.hallScroll.getChildCount() > 0){
             return;
         }
-        if (hallType == 1) {
+        HallConstructor constructor = new HallConstructor(requireContext());
             CompoundButton.OnCheckedChangeListener listener = (buttonView, isChecked) -> {
                 if (isChecked){
                     presenter.addToSelected(buttonView.getTag().toString());
@@ -117,10 +114,13 @@ public class HallTicketsFragment extends MvpAppCompatFragment implements HallTic
                     presenter.deleteFromSelected(buttonView.getTag().toString());
                 }
             };
-            binding.hallScroll.addView(SmallHall.createSmallHallView(requireContext(), hallInfo,listener, presenter.checkedSeats()));
-            binding.getRoot().invalidate();
+            if (hallType == 1) {
+                binding.hallScroll.addView(constructor.createSmallHallView(hallInfo, listener, presenter.checkedSeats()));
+                binding.getRoot().invalidate();
+            }else if (hallType == 0){
+                binding.hallScroll.addView(constructor.createBigHallView(hallInfo, listener, presenter.checkedSeats()));
+                binding.getRoot().invalidate();
         }
-
         }
 
     @Override

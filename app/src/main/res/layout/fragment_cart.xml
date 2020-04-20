@@ -6,9 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".presentation.cart.view.CartFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/emptyCartTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cart is empty"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/reservedTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/def_offs"
@@ -20,6 +31,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/button"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,6 +40,108 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/reservedTxt" />
+
+    <TextView
+        android:id="@+id/eventInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/def_offs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        tools:text="Artist | EventTitle |  EventDate" />
+
+    <TextView
+        android:id="@+id/rowHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/def_offs"
+        android:layout_marginBottom="@dimen/def_offs"
+        android:text="Row"
+        app:layout_constraintEnd_toStartOf="@+id/placeHeader"
+        app:layout_constraintStart_toStartOf="@+id/selectedSeats"
+        app:layout_constraintTop_toBottomOf="@+id/eventInfo" />
+
+    <TextView
+        android:id="@+id/placeHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/def_offs"
+        android:text="Place"
+        app:layout_constraintEnd_toEndOf="@+id/selectedSeats"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/rowHeader"
+        app:layout_constraintTop_toBottomOf="@+id/eventInfo" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/selectedSeats"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/xlarge_offs"
+        android:layout_marginTop="@dimen/def_offs"
+        android:layout_marginEnd="@dimen/xlarge_offs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/placeHeader">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/ticketsTotalTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/def_offs"
+        app:layout_constraintEnd_toStartOf="@+id/ticketsSumTxt"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectedSeats"
+        tools:text="tickets qty" />
+
+    <TextView
+        android:id="@+id/ticketsSumTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="@dimen/def_offs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ticketsTotalTxt"
+        app:layout_constraintTop_toBottomOf="@+id/selectedSeats"
+        tools:text="sum of tickets" />
+
+    <TextView
+        android:id="@+id/termsTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/def_offs"
+        android:layout_marginTop="@dimen/large_offs"
+        android:layout_marginEnd="@dimen/def_offs"
+        android:text="I have read the Terms and Conditions and fully agree with them"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ticketsSumTxt" />
+
+    <Button
+        android:id="@+id/payBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_offs"
+        android:text="Pay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/termsTxt" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/cart_not_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="payBtn,termsTxt,ticketsSumTxt,ticketsTotalTxt,selectedSeats,placeHeader,rowHeader,eventInfo,button,reservedTxt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

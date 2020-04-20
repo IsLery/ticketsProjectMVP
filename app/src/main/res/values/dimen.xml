@@ -2,5 +2,6 @@
 <resources>
     <dimen name="def_offs">16dp</dimen>
     <dimen name="large_offs">32dp</dimen>
+    <dimen name="xlarge_offs">48dp</dimen>
     <dimen name="small_offs">8dp</dimen>
 </resources>
