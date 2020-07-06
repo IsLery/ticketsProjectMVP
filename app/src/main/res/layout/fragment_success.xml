@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.success.view.SuccessFragment">
+
+    <TextView
+        android:id="@+id/eventInfo"
+        style="@style/event_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Artist | EventTitle |  EventDate" />
+
+    <TextView
+        android:id="@+id/ticketsTotalTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/def_offs"
+        android:layout_marginVertical="@dimen/large_offs"
+        app:layout_constraintEnd_toStartOf="@+id/ticketsSumTxt"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventInfo"
+        tools:text="tickets qty" />
+
+    <TextView
+        android:id="@+id/ticketsSumTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/def_offs"
+        android:layout_marginVertical="@dimen/large_offs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ticketsTotalTxt"
+        app:layout_constraintTop_toBottomOf="@+id/eventInfo"
+        tools:text="sum of tickets" />
+
+    <TextView
+        android:id="@+id/congratsTxt"
+        android:layout_marginVertical="@dimen/xlarge_offs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlue"
+        android:layout_marginHorizontal="@dimen/large_offs"
+        android:text="Congratulations!
+    You’ve successfuly payed. Your PDF
+    ticket have been sentto your email.
+    We wish you a pleasant time!"
+        app:layout_constraintTop_toBottomOf="@+id/ticketsSumTxt" />
+
+    <Button
+        android:id="@+id/toMainBtn"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/large_offs"
+        android:layout_marginVertical="@dimen/def_offs"
+        android:textColor="@color/colorGrayBasic"
+        android:text="Return to the main page"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/congratsTxt" />
+
+    <Button
+        android:id="@+id/downloadTicketBtn"
+        android:layout_marginVertical="@dimen/xlarge_offs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Download your ticket"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toMainBtn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

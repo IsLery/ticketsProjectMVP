@@ -13,11 +13,13 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="match_parent">
+
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/app_toolbar"
+        app:titleTextAppearance="@style/app_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Toolbar"
+        app:titleTextColor="@color/colorHeaderText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,6 +43,9 @@
         android:background="@color/colorGrayBasic"
         app:headerLayout="@layout/side_menu_header"
         app:menu="@menu/side_menu"
+        app:itemTextAppearance="@style/menu_item"
+        app:itemTextColor="#FFF"
+        app:itemHorizontalPadding="32dp"
         android:layout_gravity="start"
         >
         <TextView
@@ -48,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="32dp"
+            android:textColor="#FFF"
             android:text="@string/hall_address"
             android:layout_marginBottom="64dp"/>
     </com.google.android.material.navigation.NavigationView>

@@ -4,19 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context=".presentation.cart.view.CartFragment">
-
 
     <TextView
         android:id="@+id/emptyCartTxt"
+        android:textColor="@color/colorYellow"
+         android:textAllCaps="true"
+        android:textSize="24sp"
+        android:singleLine="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cart is empty"
-        android:visibility="gone"
+        android:text="The cart is empty"
+        android:textAlignment="center"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/reservedTxt"
@@ -31,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/clearBtn"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,12 +50,10 @@
 
     <TextView
         android:id="@+id/eventInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/def_offs"
+        style="@style/event_info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/clearBtn"
         tools:text="Artist | EventTitle |  EventDate" />
 
     <TextView
@@ -137,7 +141,8 @@
         android:id="@+id/cart_not_empty"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        app:constraint_referenced_ids="payBtn,termsTxt,ticketsSumTxt,ticketsTotalTxt,selectedSeats,placeHeader,rowHeader,eventInfo,button,reservedTxt"
+        android:visibility="gone"
+        app:constraint_referenced_ids="payBtn,termsTxt,ticketsSumTxt,ticketsTotalTxt,selectedSeats,placeHeader,rowHeader,eventInfo,clearBtn,reservedTxt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

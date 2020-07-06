@@ -25,22 +25,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingHorizontal="@dimen/def_offs"
+            android:textAlignment="textStart"
+            android:textSize="14sp"
             android:text="Select" />
 
-        <TextView
+        <Button
             android:id="@+id/hideFilters"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/filters"
             android:clickable="true"
             android:focusable="true"
+            android:text="@string/filters"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorHeaderText"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/clearFilters"
             style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+            android:textSize="14sp"
+            android:paddingHorizontal="@dimen/def_offs"
+            android:textAlignment="textEnd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -50,12 +61,14 @@
     <CheckedTextView
         android:id="@+id/eventCategories"
         android:textSize="20sp"
+        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checkMark="@android:drawable/arrow_down_float"
         android:clickable="true"
         android:focusable="true"
-        android:paddingEnd="12dp"
+        android:layout_marginHorizontal="@dimen/def_offs"
+        android:layout_marginBottom="@dimen/small_offs"
         android:text="@string/type_of_event" />
 
     <LinearLayout
@@ -64,6 +77,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="visible"
+        android:layout_marginHorizontal="@dimen/def_offs"
         android:paddingEnd="6dp">
 
         <CheckedTextView
@@ -101,16 +115,19 @@
     <CheckedTextView
         android:id="@+id/showCalender"
         android:textSize="20sp"
+        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checkMark="@android:drawable/arrow_down_float"
         android:clickable="true"
         android:focusable="true"
-        android:paddingEnd="12dp"
+        android:layout_marginHorizontal="@dimen/def_offs"
+        android:layout_marginBottom="@dimen/small_offs"
         android:text="@string/calendar" />
 
    <com.squareup.timessquare.CalendarPickerView
        android:id="@+id/eventCalendarView"
+       android:layout_marginHorizontal="@dimen/def_offs"
        android:layout_width="wrap_content"
        android:layout_height="400dp"/>
 

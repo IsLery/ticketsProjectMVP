@@ -8,13 +8,16 @@ import com.telran.ticketsapp.data.login.models.LoginInDto;
 import com.telran.ticketsapp.data.login.models.LoginOutDto;
 import com.telran.ticketsapp.data.login.models.PasswordRecoveryDto;
 import com.telran.ticketsapp.data.registration.models.RegUserDto;
+import com.telran.ticketsapp.data.tickets.dto.EventBookingDto;
 import com.telran.ticketsapp.data.tickets.dto.HallStructureDto;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -48,4 +51,10 @@ public interface TicketsApi {
 
     @GET("event/{eventId}/{isShort}")
     Single<Response<HallStructureDto>> getEventTicketsInfo(@Path("eventId") String id, @Path("isShort") boolean isShort);
+
+    @POST("event/book")
+    Single<Response<Void>> bookEvents(@Body EventBookingDto dto);
+
+    @DELETE("event/book")
+    Single<Response<Boolean>> deleteBooking(@Body EventBookingDto dto);
 }

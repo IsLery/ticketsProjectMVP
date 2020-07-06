@@ -5,6 +5,8 @@ import android.app.Application;
 import com.telran.ticketsapp.di.app.AppComponent;
 import com.telran.ticketsapp.di.app.AppModule;
 import com.telran.ticketsapp.di.app.DaggerAppComponent;
+import com.telran.ticketsapp.di.cart.CartComponent;
+import com.telran.ticketsapp.di.cart.CartModule;
 import com.telran.ticketsapp.di.eventPage.EventComponent;
 import com.telran.ticketsapp.di.eventPage.EventModule;
 import com.telran.ticketsapp.di.eventsList.EventsListComponent;
@@ -25,6 +27,7 @@ public class App extends Application {
     private EventsListComponent eventsListComponent;
     private EventComponent eventComponent;
     private TicketsComponent ticketsComponent;
+    private CartComponent cartComponent;
 
     public App() {
         app = this;
@@ -96,5 +99,20 @@ public class App extends Application {
 
     public void clearTicketsComponent(){
         ticketsComponent = null;
+    }
+
+    public CartComponent plus(CartModule module){
+        if (cartComponent == null){
+            cartComponent = appComponent.plus(module);
+        }
+        return cartComponent;
+    }
+
+    public void clearCartComponent(){
+        cartComponent = null;
+    }
+
+    public AppComponent getAppComponent() {
+        return appComponent;
     }
 }

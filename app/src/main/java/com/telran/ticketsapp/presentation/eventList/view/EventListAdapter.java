@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -122,19 +124,5 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         }
 
 
-
-
-//        private EventRowBinding binding;
-//
-//        public EventHolder(EventRowBinding binding) {
-//            super(binding.getRoot());
-//
-//        }
-//
-//        public void bind(EventDto event){
-//        //    binding.artistTxt.setText(event.getArtist());
-//         //   binding.eventTitleTxt.setText(event.getEventName());
-//            binding.eventDateTxt.setText(event.getDateTxt());
-//        }
     }
 }

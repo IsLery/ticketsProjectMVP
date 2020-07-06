@@ -3,32 +3,48 @@ package com.telran.ticketsapp.presentation.tickets.view;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.telran.ticketsapp.databinding.SeatRowBinding;
+import com.telran.ticketsapp.presentation.tickets.model.SeatModel;
 import com.telran.ticketsapp.presentation.tickets.presenter.SeatsAdapterLogic;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 public class SelectedTicketsAdapter extends RecyclerView.Adapter<SelectedTicketsAdapter.SelectedSeatsHolder>implements SeatsAdapterLogic {
     private static final String TAG = "SelectedTicketsAdapter";
     private List<SeatModel> selectedSeats;
     private List<String> ids;
+    private Map<String,List<String>> seatsMap;
     private Context context;
     private Double sum;
+    private OnSelectedSeatClickListener listener;
+    private Map<String, CompoundButton> hallBtns;
 
 
-    public SelectedTicketsAdapter(List<SeatModel> selectedSeats, Context context) {
-        this.selectedSeats = selectedSeats;
+    public SelectedTicketsAdapter( Context context) {
+        selectedSeats = new ArrayList<>();
         this.context = context;
+        seatsMap = new HashMap<>();
         ids = new ArrayList<>();
         sum = 0.0;
+    }
+
+    public void setHallBtns(Map<String, CompoundButton> hallBtns) {
+        this.hallBtns = hallBtns;
+    }
+
+    public void setListener(OnSelectedSeatClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -42,9 +58,12 @@ public class SelectedTicketsAdapter extends RecyclerView.Adapter<SelectedTickets
     @Override
     public void onBindViewHolder(@NonNull SelectedSeatsHolder holder, int position) {
         SeatModel seatInfo = selectedSeats.get(position);
-        Log.d(TAG, "onBindViewHolder: "+seatInfo.row+" "+seatInfo.seat);
-        holder.binding.rowTxt.setText(seatInfo.row);
-        holder.binding.seatTxt.setText(seatInfo.seat);
+        Log.d(TAG, "onBindViewHolder: "+seatInfo.getRow()+" "+seatInfo.getSeat());
+        holder.binding.rowTxt.setText(String.valueOf(seatInfo.getRow()));
+        holder.binding.seatTxt.setText(seatInfo.getSeat());
+        holder.binding.deleteBtn.setOnClickListener(v -> {
+           deleteSeatInRv(seatInfo);
+        });
     }
 
     @Override
@@ -56,21 +75,41 @@ public class SelectedTicketsAdapter extends RecyclerView.Adapter<SelectedTickets
     @Override
     public void addSeat(String seat) {
         SeatModel seatModel = new SeatModel(seat);
+        String row = String.valueOf(seatModel.getRow());
+        if (!seatsMap.containsKey(row)) {
+            seatsMap.put(row, new ArrayList<>());
+        }
+        List<String> seatsInRow = seatsMap.get(row);
+        seatsInRow.add(seatModel.getSeat());
+        Log.d(TAG, "addSeat: "+seatsInRow.size() + " row "+row);
+
         ids.add(seat);
-        selectedSeats.add(seatModel);
-        sum += seatModel.price;
-        notifyDataSetChanged();
+        int pos = ~Collections.binarySearch(selectedSeats,seatModel);
+        selectedSeats.add(pos,seatModel);
+        sum += seatModel.getPrice();
+        notifyItemInserted(pos);
     }
-
-
 
     @Override
     public void deleteSeat(String seat) {
         SeatModel model = new SeatModel(seat);
         ids.remove(seat);
         selectedSeats.remove(model);
-        sum -= model.price;
+        String row = String.valueOf(model.getRow());
+        List<String> seatsInRow = seatsMap.get(row);
+        seatsInRow.remove(model.getSeat());
+        if (seatsInRow.size() == 0){
+            seatsMap.remove(row);
+        }
+        sum -= model.getPrice();
         notifyDataSetChanged();
+    }
+
+
+    public void deleteSeatInRv(SeatModel model) {
+        Log.d(TAG, "deleteSeatInRv: "+model);
+        CompoundButton btn = hallBtns.get(model.getId());
+        btn.setChecked(false); //onclicklistener will be called
     }
 
     @Override
@@ -83,6 +122,16 @@ public class SelectedTicketsAdapter extends RecyclerView.Adapter<SelectedTickets
         return ids;
     }
 
+    @Override
+    public Map<String, List<String>> getSelectedSeats() {
+        return seatsMap;
+    }
+
+    @Override
+    public List<SeatModel> getSelectedSeatsAsList() {
+        return selectedSeats;
+    }
+
     class SelectedSeatsHolder extends RecyclerView.ViewHolder{
         SeatRowBinding binding;
 
@@ -93,31 +142,4 @@ public class SelectedTicketsAdapter extends RecyclerView.Adapter<SelectedTickets
     }
 
 
-    class SeatModel{
-        String id;
-        String row;
-        String seat;
-        Double price;
-
-        public SeatModel(String id) {
-            this.id = id;
-            String[] info = id.split("-");
-            row = info[0];
-            seat = info[1];
-            price = Double.parseDouble(info[2]);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            SeatModel seatModel = (SeatModel) o;
-            return Objects.equals(id, seatModel.id);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(id);
-        }
-    }
 }

@@ -26,6 +26,7 @@ import com.telran.ticketsapp.presentation.login.view.LoginFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ActivityMainBinding binding;
+    NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,31 +35,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(binding.getRoot());
 
        setSupportActionBar( binding.appToolbar);
-      //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer, binding.appToolbar,
-//                R.string.drawer_open,R.string.drawer_closed);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-
-//        NavigationView navView = binding.navView;
-//        navView.setNavigationItemSelectedListener(this);
-
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.root, new EventListFragment())
-//                    .commit();
-//            navView.setCheckedItem(R.id.events_item);
-//        }
-
-        NavController navController = Navigation.findNavController(this,R.id.nav_host_fragment);
+       navController = Navigation.findNavController(this,R.id.nav_host_fragment);
 
         NavigationUI.setupActionBarWithNavController(this,navController,binding.drawerLayout);
-//        AppBarConfiguration appBarConfiguration =
-//                new AppBarConfiguration.Builder(navController.getGraph())
-//                        .setDrawerLayout(binding.drawerLayout)
-//                        .build();
         NavigationUI.setupWithNavController(binding.navView,navController);
         binding.navView.setNavigationItemSelectedListener(this);
 
@@ -94,18 +73,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .setPopUpTo(R.id.main_navigation,true)
                         .build();
 
-                Navigation.findNavController(this,R.id.nav_host_fragment).navigate(R.id.eventListFragment,null,options);
+               navController.navigate(R.id.action_global_eventListFragment,null,options);
                 break;
             case R.id.login_item:
 //                getSupportFragmentManager().beginTransaction()
 ////                        .replace(R.id.root,new LoginFragment())
 ////                  //      .addToBackStack("LOGIN")
 ////                        .commit();
-                Navigation.findNavController(this,R.id.nav_host_fragment).navigate(R.id.action_eventListFragment_to_loginFragment);
-
+              //  Navigation.findNavController(this,R.id.nav_host_fragment).navigate(R.id.action_eventListFragment_to_loginFragment);
+                navController.navigate(R.id.action_global_loginFragment);
                 break;
             case R.id.cart_item:
-                Navigation.findNavController(this,R.id.nav_host_fragment).navigate(R.id.action_eventListFragment_to_cartFragment);
+              //  Navigation.findNavController(this,R.id.nav_host_fragment).navigate(R.id.action_eventListFragment_to_cartFragment);
+                navController.navigate(R.id.action_global_cartFragment);
                 break;
             case android.R.id.home:
                 if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)){

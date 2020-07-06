@@ -12,13 +12,23 @@
     />
 
     <font
+        android:font="@font/futurafuturis"
+        android:fontStyle="italic"
+        android:fontWeight="400"
+
+        app:font="@font/futurafuturis"
+        app:fontStyle="italic"
+        app:fontWeight="400"
+        />
+
+    <font
         android:font="@font/futurafuturis_bold"
         android:fontStyle="normal"
-        android:fontWeight="700"
+        android:fontWeight="800"
 
         app:font="@font/futurafuturis_bold"
         app:fontStyle="normal"
-        app:fontWeight="700"
+        app:fontWeight="800"
         />
 
 </font-family>

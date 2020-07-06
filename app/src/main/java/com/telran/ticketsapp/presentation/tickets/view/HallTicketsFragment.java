@@ -1,8 +1,14 @@
 package com.telran.ticketsapp.presentation.tickets.view;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -11,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -28,7 +35,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 
-public class HallTicketsFragment extends MvpAppCompatFragment implements HallTicketsView {
+public class HallTicketsFragment extends MvpAppCompatFragment implements HallTicketsView, View.OnClickListener {
     FragmentHallTicketsBinding binding;
 
     private static final String TAG = "HallTicketsFragment";
@@ -37,6 +44,7 @@ public class HallTicketsFragment extends MvpAppCompatFragment implements HallTic
     private static final String EVENT_FULL_TITLE = "full_title_of_event";
 
     private int hallType;
+    private SelectedTicketsAdapter adapter;
 
     @InjectPresenter
     public SelectTicketsPresenter presenter;
@@ -70,23 +78,18 @@ public class HallTicketsFragment extends MvpAppCompatFragment implements HallTic
 
 
         binding = FragmentHallTicketsBinding.inflate(inflater,container,false);
-        binding.eventInfo.setText(getArguments().getString(EVENT_FULL_TITLE,""));
+        String fullInfo = getArguments().getString(EVENT_FULL_TITLE,"");
+        presenter.setEventInfo(fullInfo);
+        binding.eventInfo.setText(fullInfo);
         binding.selectedSeats.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.selectedSeats.setAdapter(presenter.getAdapterInstance());
-
-
-     //   String[] ranges = {"100$","200$","300$"};
-//        ArrayAdapter<String> rangeAdapter = new ArrayAdapter<>(requireContext(),android.R.layout.simple_list_item_1,ranges);
-//        binding.priceRanges.setAdapter(rangeAdapter);
-
+        adapter = presenter.getAdapterInstance();
+        binding.selectedSeats.setAdapter(adapter);
+        binding.toCartBtn.setOnClickListener(this);
+        DividerItemDecoration decoration = new DividerItemDecoration(requireContext(),DividerItemDecoration.VERTICAL);
+        binding.selectedSeats.addItemDecoration(decoration);
+        binding.priceRanges.setLayoutManager(new LinearLayoutManager(requireContext()));
         return binding.getRoot();
     }
-
-    @Override
-    public void proceedToCart() {
-
-    }
-
 
     @Override
     public void selectTicket() {
@@ -96,12 +99,9 @@ public class HallTicketsFragment extends MvpAppCompatFragment implements HallTic
     @Override
     public void initHall(HallStructureDto hallInfo) {
         List<PriceRangeDto> ranges = hallInfo.getPriceRanges();
-        List<String> prices = new ArrayList<>();
-        ArrayAdapter<String> rangeAdapter = new ArrayAdapter<>(requireContext(),android.R.layout.simple_list_item_1,prices);
+
+        PriceRangesAdapter rangeAdapter = new PriceRangesAdapter(ranges,requireContext());
         binding.priceRanges.setAdapter(rangeAdapter);
-        for (PriceRangeDto r: ranges) {
-            prices.add(getString(R.string.price_range,r.getPrice()));
-        }
         if (binding.hallScroll.getChildCount() > 0){
             return;
         }
@@ -121,6 +121,7 @@ public class HallTicketsFragment extends MvpAppCompatFragment implements HallTic
                 binding.hallScroll.addView(constructor.createBigHallView(hallInfo, listener, presenter.checkedSeats()));
                 binding.getRoot().invalidate();
         }
+            adapter.setHallBtns(constructor.getAllButtons());
         }
 
     @Override
@@ -131,5 +132,39 @@ public class HallTicketsFragment extends MvpAppCompatFragment implements HallTic
         binding.ticketsSumTxt.setText(getString(R.string.price_range,total));
     }
 
+    @Override
+    public void showTicketsRv() {
+        binding.showIfselected.setVisibility(View.VISIBLE);
+        binding.toCartBtn.setEnabled(true);
+    }
 
+    @Override
+    public void hideTicketsRv() {
+        binding.showIfselected.setVisibility(View.INVISIBLE);
+        binding.toCartBtn.setEnabled(false);
+    }
+
+    @Override
+    public void showNextView() {
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getActivity(), CartTimerReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(),1,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.RTC,System.currentTimeMillis()+20000,pendingIntent);
+
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_hallTicketsFragment_to_cartFragment);
+    }
+
+    @Override
+    public void showError(String msg) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.toCartBtn:
+                presenter.bookTickets();
+
+        }
+    }
 }

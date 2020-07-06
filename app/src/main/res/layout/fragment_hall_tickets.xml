@@ -6,138 +6,151 @@
     android:layout_height="match_parent"
     tools:context=".presentation.tickets.view.HallTicketsFragment">
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/eventInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/def_offs"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Artist | EventTitle |  EventDate" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <HorizontalScrollView
-        android:id="@+id/hallScroll"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        tools:layout_height="100dp"
-        android:layout_marginStart="@dimen/def_offs"
-        android:layout_marginTop="@dimen/def_offs"
-        android:layout_marginEnd="@dimen/def_offs"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventInfo" />
+        <TextView
+            android:id="@+id/eventInfo"
+            style="@style/event_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Artist | EventTitle |  EventDate" />
 
-    <TextView
-        android:id="@+id/rowHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/def_offs"
-        android:layout_marginBottom="@dimen/def_offs"
-        android:layout_weight="1"
-        android:text="Row"
-        app:layout_constraintBottom_toTopOf="@+id/selectedSeats"
-        app:layout_constraintEnd_toStartOf="@+id/placeHeader"
-        app:layout_constraintStart_toStartOf="@+id/selectedSeats"
-        app:layout_constraintTop_toBottomOf="@+id/hallScroll" />
 
-    <TextView
-        android:id="@+id/placeHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/def_offs"
-        android:layout_marginBottom="@dimen/def_offs"
-        android:layout_weight="1"
-        android:text="Place"
-        app:layout_constraintBottom_toTopOf="@+id/selectedSeats"
-        app:layout_constraintEnd_toEndOf="@+id/selectedSeats"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/rowHeader"
-        app:layout_constraintTop_toBottomOf="@+id/hallScroll" />
+        <HorizontalScrollView
+            android:id="@+id/hallScroll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/def_offs"
+            android:layout_marginEnd="@dimen/def_offs"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eventInfo"
+            tools:layout_height="100dp" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="price_ranges,selectedSeats"
-        tools:layout_editor_absoluteX="164dp"
-        tools:layout_editor_absoluteY="135dp" />
+        <TextView
+            android:id="@+id/rowHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/def_offs"
+            android:layout_marginBottom="@dimen/def_offs"
+            android:layout_weight="1"
+            android:text="Row"
+            app:layout_constraintBottom_toTopOf="@+id/selectedSeats"
+            app:layout_constraintEnd_toStartOf="@+id/placeHeader"
+            app:layout_constraintStart_toStartOf="@+id/selectedSeats"
+            app:layout_constraintTop_toBottomOf="@+id/hallScroll" />
 
-    <ListView
-        android:id="@+id/price_ranges"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/def_offs"
-        android:layout_marginEnd="@dimen/def_offs"
-        app:layout_constraintEnd_toStartOf="@id/selectedSeats"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/selectedSeats" />
+        <TextView
+            android:id="@+id/placeHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/def_offs"
+            android:layout_marginBottom="@dimen/def_offs"
+            android:layout_weight="1"
+            android:text="Place"
+            app:layout_constraintBottom_toTopOf="@+id/selectedSeats"
+            app:layout_constraintEnd_toEndOf="@+id/selectedSeats"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/rowHeader"
+            app:layout_constraintTop_toBottomOf="@+id/hallScroll" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/selectedSeats"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/large_offs"
-        android:layout_marginTop="@dimen/def_offs"
-        android:layout_marginEnd="@dimen/def_offs"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/price_ranges"
-        app:layout_constraintTop_toBottomOf="@+id/hallScroll"
-        app:layout_constraintVertical_bias="0.24000001">
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="price_ranges,selectedSeats"
+            tools:layout_editor_absoluteX="164dp"
+            tools:layout_editor_absoluteY="135dp" />
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/price_ranges"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/def_offs"
+            android:layout_marginEnd="@dimen/def_offs"
+            app:layout_constraintEnd_toStartOf="@id/selectedSeats"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/selectedSeats" />
 
-    <TextView
-        android:id="@+id/priceRangeTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/def_offs"
-        android:layout_marginBottom="@dimen/def_offs"
-        android:text="Price ranges:"
-        app:layout_constraintBottom_toTopOf="@+id/price_ranges"
-        app:layout_constraintEnd_toEndOf="@+id/price_ranges"
-        app:layout_constraintStart_toStartOf="@+id/price_ranges"
-        app:layout_constraintTop_toBottomOf="@+id/hallScroll" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/selectedSeats"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_offs"
+            android:layout_marginTop="@dimen/def_offs"
+            android:layout_marginEnd="@dimen/def_offs"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/price_ranges"
+            app:layout_constraintTop_toBottomOf="@+id/hallScroll"
+            app:layout_constraintVertical_bias="0.24000001">
 
-    <TextView
-        android:id="@+id/ticketsTotalTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/def_offs"
-        app:layout_constraintEnd_toStartOf="@+id/ticketsSumTxt"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barrier2"
-        tools:text="tickets qty" />
+        </androidx.recyclerview.widget.RecyclerView>
 
-    <TextView
-        android:id="@+id/ticketsSumTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/def_offs"
+        <TextView
+            android:id="@+id/priceRangeTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/def_offs"
+            android:layout_marginBottom="@dimen/def_offs"
+            android:textStyle="bold"
+            android:text="Price ranges:"
+            app:layout_constraintBottom_toTopOf="@+id/price_ranges"
+            app:layout_constraintEnd_toEndOf="@+id/price_ranges"
+            app:layout_constraintStart_toStartOf="@+id/price_ranges"
+            app:layout_constraintTop_toBottomOf="@+id/hallScroll" />
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/ticketsTotalTxt"
-        app:layout_constraintTop_toBottomOf="@+id/barrier2"
-        tools:text="sum of tickets" />
+        <TextView
+            android:id="@+id/ticketsTotalTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/def_offs"
+            app:layout_constraintEnd_toStartOf="@+id/ticketsSumTxt"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/barrier2"
+            tools:text="tickets qty" />
 
-    <Button
-        android:id="@+id/toCartBtn"
-        style="@style/app_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/large_offs"
-        android:text="To the cart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ticketsSumTxt" />
+        <TextView
+            android:id="@+id/ticketsSumTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/def_offs"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ticketsTotalTxt"
+            app:layout_constraintTop_toBottomOf="@+id/barrier2"
+            tools:text="sum of tickets" />
+
+        <Button
+            android:id="@+id/toCartBtn"
+            style="@style/app_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/def_offs"
+            android:enabled="false"
+            android:text="To the cart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ticketsSumTxt" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/showIfselected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:constraint_referenced_ids="ticketsSumTxt,selectedSeats,rowHeader,placeHeader,ticketsTotalTxt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

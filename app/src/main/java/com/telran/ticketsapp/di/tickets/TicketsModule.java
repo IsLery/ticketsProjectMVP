@@ -2,6 +2,7 @@ package com.telran.ticketsapp.di.tickets;
 
 import com.telran.ticketsapp.business.tickets.SelectTicketsInteractor;
 import com.telran.ticketsapp.business.tickets.SelectTicketsInteractorImpl;
+import com.telran.ticketsapp.data.provider.store.StoreProvider;
 import com.telran.ticketsapp.data.provider.web.TicketsApi;
 import com.telran.ticketsapp.data.tickets.SelectTicketsRepository;
 import com.telran.ticketsapp.data.tickets.SelectTicketsRepositoryImpl;
@@ -14,8 +15,8 @@ public class TicketsModule {
 
     @Provides
     @TicketsScope
-    SelectTicketsRepository providesSelectTicketsRepository(TicketsApi api){
-        return new SelectTicketsRepositoryImpl(api);
+    SelectTicketsRepository providesSelectTicketsRepository(TicketsApi api, StoreProvider provider){
+        return new SelectTicketsRepositoryImpl(api, provider);
     }
 
     @Provides

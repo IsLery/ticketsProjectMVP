@@ -11,19 +11,26 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/eventsRv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/showFiltersBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <Button
         android:id="@+id/showFiltersBtn"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="0dp"
         android:backgroundTint="#FFF"
+        android:textColor="@color/colorHeaderText"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:padding="0dp"
         android:text="@string/filters"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

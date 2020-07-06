@@ -13,14 +13,16 @@
         />
 
     <font
-        android:font="@font/dinpro_light"
-        android:fontStyle="normal"
-        android:fontWeight="300"
+        android:font="@font/dinpro_regular"
+        android:fontStyle="italic"
+        android:fontWeight="400"
 
-        app:font="@font/dinpro_light"
-        app:fontStyle="normal"
-        app:fontWeight="300"
+        app:font="@font/dinpro_regular"
+        app:fontStyle="italic"
+        app:fontWeight="400"
         />
+
+
 
     <font
         android:font="@font/dinpro_black"
@@ -32,14 +34,14 @@
         app:fontWeight="900"
         />
 
-    <font
-        android:font="@font/dinpro_condbold"
-        android:fontStyle="normal"
-        android:fontWeight="600"
+<!--    <font-->
+<!--        android:font="@font/dinpro_condbold"-->
+<!--        android:fontStyle="normal"-->
+<!--        android:fontWeight="600"-->
 
-        app:font="@font/dinpro_condbold"
-        app:fontStyle="normal"
-        app:fontWeight="600"
-        />
+<!--        app:font="@font/dinpro_condbold"-->
+<!--        app:fontStyle="normal"-->
+<!--        app:fontWeight="600"-->
+<!--        />-->
 
 </font-family>

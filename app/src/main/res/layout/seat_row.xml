@@ -1,26 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:weightSum="2">
+    android:minHeight="12dp"
+
+
+    >
 
     <TextView
         android:id="@+id/rowTxt"
         style="@style/tickets_rv_item"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        tools:text="1" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/seatTxt"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5"
+        tools:text="10" />
 
     <TextView
         android:id="@+id/seatTxt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         style="@style/tickets_rv_item"
-        tools:text="2"
-        android:layout_weight="1"
-        />
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/deleteBtn"
+        app:layout_constraintStart_toEndOf="@id/rowTxt"
 
-</LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5"
+        tools:text="2" />
+
+    <ImageButton
+        android:id="@+id/deleteBtn"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:tint="@color/colorGrayBasic"
+        app:layout_constraintEnd_toEndOf="@+id/seatTxt"
+        app:layout_constraintTop_toTopOf="@id/seatTxt"
+       />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

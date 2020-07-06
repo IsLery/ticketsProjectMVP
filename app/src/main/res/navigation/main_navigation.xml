@@ -38,7 +38,11 @@
         android:id="@+id/hallTicketsFragment"
         android:name="com.telran.ticketsapp.presentation.tickets.view.HallTicketsFragment"
         android:label="TICKETS"
-        tools:layout="@layout/fragment_hall_tickets" />
+        tools:layout="@layout/fragment_hall_tickets" >
+        <action
+            android:id="@+id/action_hallTicketsFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.telran.ticketsapp.presentation.login.view.LoginFragment"
@@ -57,10 +61,54 @@
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.telran.ticketsapp.presentation.cart.view.CartFragment"
-        android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" />
+        android:label="CART"
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cartFragment_to_payingFragment"
+            app:destination="@id/payingFragment" />
+    </fragment>
     <dialog
         android:id="@+id/eventsFiltersDialog"
         android:name="com.telran.ticketsapp.presentation.eventList.view.filters.EventsFiltersDialog"
         android:label="EventsFiltersDialog" />
+    <action
+        android:id="@+id/action_global_eventListFragment"
+        app:destination="@id/eventListFragment"
+        app:popUpTo="@id/main_navigation" />
+    <action
+        android:id="@+id/action_global_loginFragment"
+        app:destination="@id/loginFragment"
+        app:popUpTo="@id/main_navigation" />
+    <action
+        android:id="@+id/action_global_cartFragment"
+        app:destination="@id/cartFragment"
+        app:popUpTo="@id/main_navigation"
+        app:popUpToInclusive="false" />
+    <fragment
+        android:id="@+id/payingFragment"
+        android:name="com.telran.ticketsapp.presentation.payment.view.PayingFragment"
+        android:label="PAYING"
+        tools:layout="@layout/fragment_paying" >
+        <argument
+            android:name="eventInfo"
+            app:argType="string"
+            android:defaultValue='""' />
+        <argument
+            android:name="ticketsQty"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="ticketsSum"
+            app:argType="float"
+            android:defaultValue="0.0" />
+        <action
+            android:id="@+id/action_payingFragment_to_successFragment"
+            app:destination="@id/successFragment"
+            app:popUpTo="@id/main_navigation" />
+    </fragment>
+    <fragment
+        android:id="@+id/successFragment"
+        android:name="com.telran.ticketsapp.presentation.success.view.SuccessFragment"
+        android:label="Success"
+        tools:layout="@layout/fragment_success" />
 </navigation>
